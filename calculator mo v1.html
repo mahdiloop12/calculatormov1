@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاسبه‌گر معافی</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f1b3a, #1c3b6a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+        }
+        
+        .calculator {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35);
+            width: 100%;
+            max-width: 780px;
+            padding: 35px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .calculator::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, #3498db, #2ecc71, #e74c3c);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 34px;
+            position: relative;
+            padding-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        h1 i {
+            color: #3498db;
+            font-size: 32px;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 4px;
+            background: linear-gradient(to right, #1a2a6c, #4a6491);
+            border-radius: 4px;
+        }
+        
+        .input-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #3498db;
+            position: relative;
+        }
+        
+        .formula-container {
+            background: #e3f2fd;
+            padding: 18px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-size: 19px;
+            color: #1a237e;
+            font-family: 'Courier New', monospace;
+            min-height: 85px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+            border: 1px solid #bbdefb;
+        }
+        
+        .formula-highlight {
+            color: #e74c3c;
+            font-weight: bold;
+            background: rgba(231, 76, 60, 0.1);
+            padding: 0 6px;
+            border-radius: 5px;
+            margin: 0 3px;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 25px 0;
+        }
+        
+        .input-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 20px;
+            background: #edf7ff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+            transition: transform 0.3s ease;
+        }
+        
+        .input-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .input-row {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        label {
+            font-size: 18px;
+            color: #1a2a6c;
+            font-weight: 600;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        label i {
+            color: #3498db;
+            font-size: 20px;
+        }
+        
+        input[type="number"] {
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #d1e3ff;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s;
+            background: white;
+            font-family: 'Courier New', monospace;
+        }
+        
+        input[type="number"]:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: 1px solid #bbdefb;
+            cursor: pointer;
+        }
+        
+        .checkbox-container:hover {
+            background: #d1e8ff;
+            transform: scale(1.02);
+        }
+        
+        .checkbox-container label {
+            font-size: 17px;
+            color: #1e3c72;
+            font-weight: 600;
+            min-width: auto;
+            cursor: pointer;
+        }
+        
+        input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: #3498db;
+        }
+        
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0 15px;
+        }
+        
+        button {
+            color: white;
+            border: none;
+            padding: 16px 35px;
+            font-size: 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        #calculateBtn {
+            background: linear-gradient(to right, #1a2a6c, #2a5298);
+        }
+        
+        #clearBtn {
+            background: linear-gradient(to right, #b21f1f, #d43f3f);
+        }
+        
+        #clearHistoryBtn {
+            background: linear-gradient(to right, #8e44ad, #9b59b6);
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+        
+        button:hover::before {
+            left: 100%;
+        }
+        
+        button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .result-section {
+            margin-top: 25px;
+            padding: 25px;
+            background: linear-gradient(to right, #e9f7ef, #d1f0e0);
+            border-radius: 15px;
+            border-left: 5px solid #27ae60;
+            font-size: 22px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .result-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        
+        .result-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+        }
+        
+        .result-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .result-title {
+            display: block;
+            margin-bottom: 15px;
+            color: #1a2a6c;
+            font-weight: bold;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .result-value {
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 36px;
+            display: block;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 10px;
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        .result-value:hover {
+            background: rgba(39, 174, 96, 0.1);
+            transform: scale(1.05);
+        }
+        
+        .result-value.copied::after {
+            content: 'کپی شد!';
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c3e50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 14px;
+            animation: fadeOut 2s forwards;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; display: none; }
+        }
+        
+        .history-section {
+            margin-top: 35px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        
+        .history-title {
+            color: #1a2a6c;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .history-container {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            border-radius: 10px;
+            background: white;
+        }
+        
+        .history-header-row {
+            display: flex;
+            background: #e3f2fd;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #1a2a6c;
+        }
+        
+        .history-header-row > div {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .history-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            text-align: right;
+            border-left: 3px solid #3498db;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .history-item:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-left: 3px solid #2ecc71;
+        }
+        
+        .history-values {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .history-value {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .history-label {
+            font-weight: 600;
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .history-data {
+            font-weight: bold;
+            color: #1a2a6c;
+            font-size: 16px;
+        }
+        
+        .history-result {
+            font-weight: bold;
+            color: #27ae60;
+            font-size: 18px;
+        }
+        
+        .history-timestamp {
+            color: #7f8c8d;
+            font-size: 14px;
+            text-align: center;
+            min-width: 150px;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        .creator {
+            margin-top: 35px;
+            color: #7f8c8d;
+            font-size: 16px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .empty-history {
+            text-align: center;
+            padding: 30px;
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .calculator {
+                padding: 25px 15px;
+            }
+            
+            .input-section {
+                padding: 20px 15px;
+            }
+            
+            .input-box {
+                min-width: 100%;
+            }
+            
+            .result-box {
+                min-width: 100%;
+            }
+            
+            button {
+                min-width: 100%;
+            }
+            
+            .history-values {
+                min-width: 100%;
+            }
+            
+            .history-value {
+                min-width: calc(50% - 10px);
+            }
+        }
+        
+        /* Animation for results */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .result-box.updated {
+            animation: pulse 0.8s ease;
+        }
+        
+        .history-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1><i class="fas fa-calculator"></i>محاسبه‌گر معافی</h1>
+        
+        <div class="input-section">
+            <div class="formula-container">
+                <div id="formulaText">فرمول: z = y - (فی مرجع × (درصد ÷ ۱۰۰))</div>
+            </div>
+            
+            <div class="input-group">
+                <div class="input-box">
+                    <div class="input-row">
+                        <label for="xInput"><i class="fas fa-tag"></i>فی مرجع (x)</label>
+                        <input type="number" id="xInput" placeholder="مثال: 100" autofocus>
+                    </div>
+                    
+                    <div class="checkbox-container" id="checkboxContainer">
+                        <input type="checkbox" id="calculateOption" checked>
+                        <label for="calculateOption">اضافات (افزودن ۱۰٪ به x)</label>
+                    </div>
+                </div>
+                
+                <div class="input-box">
+                    <div class="input-row">
+                        <label for="dInput"><i class="fas fa-percentage"></i>مقدار درصد</label>
+                        <input type="number" id="dInput" placeholder="مثال: 5">
+                    </div>
+                    
+                    <div class="input-row">
+                        <label><i class="fas fa-info-circle"></i>توضیحات</label>
+                        <div style="font-size: 15px; color: #555; line-height: 1.6;">
+                            مقدار درصد به صورت عددی وارد می‌شود. فرمول بر اساس وضعیت اضافات تغییر می‌کند.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button id="calculateBtn"><i class="fas fa-calculator"></i>محاسبه</button>
+                <button id="clearBtn"><i class="fas fa-trash-alt"></i>پاک کردن اعداد</button>
+            </div>
+        </div>
+        
+        <div class="result-section">
+            <div class="result-row">
+                <div class="result-box" id="xResultBox">
+                    <span class="result-title"><i class="fas fa-tag"></i>فی مرجع (x)</span>
+                    <span class="result-value" id="xValue">0</span>
+                </div>
+                
+                <div class="result-box" id="yResultBox">
+                    <span class="result-title"><i class="fas fa-yen-sign"></i>فی مرجع با اضافات 10%</span>
+                    <span class="result-value" id="yValue">0</span>
+                </div>
+                
+                <div class="result-box" id="zResultBox">
+                    <span class="result-title"><i class="fas fa-equals"></i>نتیجه نهایی (z)</span>
+                    <span class="result-value" id="zValue">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="history-section">
+            <div class="history-header">
+                <div class="history-title">
+                    <i class="fas fa-history"></i>تاریخچه محاسبات
+                </div>
+            </div>
+            
+            <div class="history-container" id="historyContainer">
+                <div class="history-header-row">
+                    <div>فی مرجع</div>
+                    <div>درصد</div>
+                    <div>فی با اضافات</div>
+                    <div>نتیجه</div>
+                    <div>زمان</div>
+                </div>
+                <div id="history"></div>
+            </div>
+            
+            <div class="history-actions">
+                <button id="clearHistoryBtn"><i class="fas fa-trash"></i>پاک کردن تاریخچه</button>
+            </div>
+        </div>
+        
+        <div class="creator">
+            <i class="fas fa-code"></i> توسعه داده شده توسط Uncle Mahdi
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // عناصر DOM
+            const xInput = document.getElementById('xInput');
+            const dInput = document.getElementById('dInput');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+            const xValue = document.getElementById('xValue');
+            const yValue = document.getElementById('yValue');
+            const zValue = document.getElementById('zValue');
+            const historyContainer = document.getElementById('history');
+            const calculateOption = document.getElementById('calculateOption');
+            const formulaText = document.getElementById('formulaText');
+            const checkboxContainer = document.getElementById('checkboxContainer');
+            const xResultBox = document.getElementById('xResultBox');
+            const yResultBox = document.getElementById('yResultBox');
+            const zResultBox = document.getElementById('zResultBox');
+            
+            // متغیرهای محاسبات و تاریخچه
+            let x = 0;
+            let y = 0;
+            let z = 0;
+            let calculationHistory = [];
+            const MAX_HISTORY = 20;
+            
+            // رویداد محاسبه
+            calculateBtn.addEventListener('click', calculate);
+            
+            // رویداد پاک کردن اعداد
+            clearBtn.addEventListener('click', clearInputs);
+            
+            // رویداد پاک کردن تاریخچه
+            clearHistoryBtn.addEventListener('click', clearHistory);
+            
+            // رویداد کپی کردن
+            document.querySelectorAll('.result-value').forEach(el => {
+                el.addEventListener('click', copyToClipboard);
+            });
+            
+            // رویداد تغییر وضعیت چک‌باکس
+            calculateOption.addEventListener('change', updateFormulaText);
+            
+            // امکان استفاده از Enter
+            xInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') calculate();
+            });
+            
+            dInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') calculate();
+            });
+            
+            // به‌روزرسانی فرمول بر اساس وضعیت چک‌باکس
+            function updateFormulaText() {
+                if (calculateOption.checked) {
+                    formulaText.innerHTML = 'فرمول: z = y - (فی مرجع × (درصد ÷ ۱۰۰)) <span class="formula-highlight">[y = فی مرجع + ۱۰٪]</span>';
+                    checkboxContainer.style.background = '#e3f2fd';
+                } else {
+                    formulaText.innerHTML = 'فرمول: z = y - (فی مرجع × (درصد ÷ ۱۰۰)) <span class="formula-highlight">[y = فی مرجع]</span>';
+                    checkboxContainer.style.background = '#ffecb3';
+                }
+            }
+            
+            // مقداردهی اولیه فرمول
+            updateFormulaText();
+            
+            function calculate() {
+                // دریافت مقادیر ورودی
+                x = parseFloat(xInput.value);
+                const d = parseFloat(dInput.value);
+                
+                // اعتبارسنجی ورودی‌ها
+                if (isNaN(x)) {
+                    alert('لطفاً برای فی مرجع یک عدد معتبر وارد کنید');
+                    xInput.focus();
+                    return;
+                }
+                
+                if (isNaN(d)) {
+                    alert('لطفاً برای درصد یک عدد معتبر وارد کنید');
+                    dInput.focus();
+                    return;
+                }
+                
+                // محاسبه y بر اساس وضعیت چک‌باکس
+                if (calculateOption.checked) {
+                    // اگر چک‌باکس فعال باشد: y = x + (x * 0.10)
+                    y = x + (x * 0.10);
+                } else {
+                    // اگر چک‌باکس غیرفعال باشد: y = x
+                    y = x;
+                }
+                
+                // محاسبه z = y - (x * (d / 100))
+                const discount = x * (d / 100);
+                z = y - discount;
+                
+                // نمایش نتایج
+                xValue.textContent = x.toLocaleString('fa-IR');
+                yValue.textContent = y.toLocaleString('fa-IR');
+                zValue.textContent = z.toLocaleString('fa-IR');
+                
+                // انیمیشن برای جعبه‌های نتیجه
+                xResultBox.classList.remove('updated');
+                yResultBox.classList.remove('updated');
+                zResultBox.classList.remove('updated');
+                
+                setTimeout(() => {
+                    xResultBox.classList.add('updated');
+                    yResultBox.classList.add('updated');
+                    zResultBox.classList.add('updated');
+                }, 10);
+                
+                // ذخیره در تاریخچه
+                saveToHistory(x, d, y, z);
+            }
+            
+            function saveToHistory(x, d, y, z) {
+                // ایجاد رکورد تاریخچه
+                const historyEntry = {
+                    timestamp: new Date().toLocaleString('fa-IR', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    }),
+                    x,
+                    d,
+                    y,
+                    z
+                };
+                
+                // اضافه کردن به ابتدای آرایه
+                calculationHistory.unshift(historyEntry);
+                
+                // حفظ فقط آخرین MAX_HISTORY مورد
+                if (calculationHistory.length > MAX_HISTORY) {
+                    calculationHistory.pop();
+                }
+                
+                // به‌روزرسانی نمایش تاریخچه
+                updateHistoryDisplay();
+            }
+            
+            function updateHistoryDisplay() {
+                if (calculationHistory.length === 0) {
+                    historyContainer.innerHTML = '<div class="empty-history"><i class="fas fa-history"></i><p>تاریخچه‌ای موجود نیست</p></div>';
+                    return;
+                }
+                
+                let historyHTML = "";
+                
+                calculationHistory.forEach((entry, index) => {
+                    historyHTML += `
+                    <div class="history-item">
+                        <div class="history-values">
+                            <div class="history-value">
+                                <span class="history-label">فی مرجع</span>
+                                <span class="history-data">${entry.x.toLocaleString('fa-IR')}</span>
+                            </div>
+                            <div class="history-value">
+                                <span class="history-label">درصد</span>
+                                <span class="history-data">${entry.d}%</span>
+                            </div>
+                            <div class="history-value">
+                                <span class="history-label">فی با اضافات</span>
+                                <span class="history-data">${entry.y.toLocaleString('fa-IR')}</span>
+                            </div>
+                            <div class="history-value">
+                                <span class="history-label">نتیجه</span>
+                                <span class="history-result">${entry.z.toLocaleString('fa-IR')}</span>
+                            </div>
+                        </div>
+                        <div class="history-timestamp"><i class="fas fa-clock"></i> ${entry.timestamp}</div>
+                    </div>
+                    `;
+                });
+                
+                historyContainer.innerHTML = historyHTML;
+            }
+            
+            function clearInputs() {
+                // پاک کردن فیلدهای ورودی
+                xInput.value = '';
+                dInput.value = '';
+                
+                // پاک کردن نتایج
+                xValue.textContent = '0';
+                yValue.textContent = '0';
+                zValue.textContent = '0';
+                
+                // بازگرداندن چک‌باکس به حالت پیش‌فرض
+                calculateOption.checked = true;
+                updateFormulaText();
+                
+                // فوکوس روی فیلد فی مرجع
+                xInput.focus();
+            }
+            
+            function clearHistory() {
+                if (calculationHistory.length === 0) {
+                    alert('تاریخچه‌ای برای پاک کردن وجود ندارد');
+                    return;
+                }
+                
+                if (confirm('آیا مطمئن هستید که می‌خواهید تمام تاریخچه محاسبات را پاک کنید؟')) {
+                    // پاک کردن تاریخچه
+                    calculationHistory = [];
+                    updateHistoryDisplay();
+                }
+            }
+            
+            function copyToClipboard(e) {
+                const text = e.target.textContent.replace(/,/g, '');
+                navigator.clipboard.writeText(text)
+                    .then(() => {
+                        // نمایش پیام کپی شد
+                        e.target.classList.add('copied');
+                        setTimeout(() => {
+                            e.target.classList.remove('copied');
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('خطا در کپی کردن: ', err);
+                        alert('خطا در کپی کردن مقدار');
+                    });
+            }
+            
+            // مقداردهی اولیه تاریخچه
+            updateHistoryDisplay();
+        });
+    </script>
+</body>
+</html>
