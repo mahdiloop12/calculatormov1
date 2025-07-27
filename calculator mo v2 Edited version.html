@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محاسبه‌گر معافی - نسخه اصلاح شده</title>
+    <title>محاسبه‌گر معافی</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -81,31 +81,6 @@
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
             border-left: 4px solid #3498db;
             position: relative;
-        }
-        
-        .formula-container {
-            background: #e3f2fd;
-            padding: 18px;
-            border-radius: 12px;
-            margin: 20px 0;
-            font-size: 19px;
-            color: #1a237e;
-            font-family: 'Courier New', monospace;
-            min-height: 85px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.4s ease;
-            border: 1px solid #bbdefb;
-        }
-        
-        .formula-highlight {
-            color: #e74c3c;
-            font-weight: bold;
-            background: rgba(231, 76, 60, 0.1);
-            padding: 0 6px;
-            border-radius: 5px;
-            margin: 0 3px;
         }
         
         .input-group {
@@ -592,22 +567,83 @@
             padding-bottom: 8px;
         }
         
-        .calculation-guide {
-            background: #fff8e1;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 20px;
-            font-size: 15px;
-            color: #5d4037;
-            border: 1px solid #ffd54f;
+        /* Help icon and tooltip */
+        .help-container {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            z-index: 100;
         }
         
-        .guide-title {
-            font-weight: bold;
-            margin-bottom: 8px;
+        .help-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #3498db;
+            color: white;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .help-icon:hover {
+            background: #2980b9;
+            transform: scale(1.1);
+        }
+        
+        .help-tooltip {
+            position: absolute;
+            bottom: 60px;
+            left: 0;
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            text-align: right;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            z-index: 101;
+        }
+        
+        .help-icon:hover + .help-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .help-tooltip h3 {
+            color: #1a2a6c;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .help-tooltip ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .help-tooltip li {
+            margin-bottom: 10px;
+            padding-right: 10px;
+            position: relative;
+        }
+        
+        .help-tooltip li:before {
+            content: '•';
+            color: #3498db;
+            font-size: 20px;
+            position: absolute;
+            right: -15px;
+            top: -2px;
         }
     </style>
 </head>
@@ -616,10 +652,6 @@
         <h1><i class="fas fa-calculator"></i>محاسبه‌گر معافی</h1>
         
         <div class="input-section">
-            <div class="formula-container">
-                <div id="formulaText">فرمول: z = y - (y × (درصد ÷ ۱۰۰))</div>
-            </div>
-            
             <div class="input-group">
                 <div class="input-box">
                     <div class="input-row">
@@ -642,14 +674,6 @@
                     <div class="input-row">
                         <label for="dInput"><i class="fas fa-percentage"></i>مقدار درصد</label>
                         <input type="number" id="dInput" placeholder="مثال: 5">
-                    </div>
-                    
-                    <div class="calculation-guide">
-                        <div class="guide-title"><i class="fas fa-lightbulb"></i>راهنمای محاسبه</div>
-                        <div>
-                            <p>• بدون اضافات: z = x - (x × (درصد ÷ ۱۰۰))</p>
-                            <p>• با اضافات: y = x + (x × ۰.۱۰) سپس z = y - (y × (درصد ÷ ۱۰۰))</p>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -710,6 +734,25 @@
             <i class="fas fa-code"></i> توسعه داده شده توسط Uncle Mahdi
         </div>
     </div>
+    
+    <!-- Help icon with tooltip -->
+    <div class="help-container">
+        <div class="help-icon">
+            <i class="fas fa-info"></i>
+        </div>
+        <div class="help-tooltip">
+            <h3><i class="fas fa-lightbulb"></i> راهنمای محاسبه</h3>
+            <ul>
+                <li>فی مرجع (x): قیمت پایه کالا</li>
+                <li>مقدار درصد: درصد تخفیف مورد نظر</li>
+                <li>اضافات: افزودن ۱۰٪ به قیمت پایه</li>
+                <li>بدون اضافات: z = x - (x × (درصد ÷ ۱۰۰))</li>
+                <li>با اضافات: y = x + (x × ۰.۱۰) سپس z = y - (y × (درصد ÷ ۱۰۰))</li>
+                <li>برای کپی کردن نتایج، روی اعداد کلیک کنید</li>
+                <li>تاریخچه محاسبات تا ۲۰ مورد ذخیره می‌شود</li>
+            </ul>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -726,7 +769,6 @@
             const zValue = document.getElementById('zValue');
             const historyContainer = document.getElementById('history');
             const calculateOption = document.getElementById('calculateOption');
-            const formulaText = document.getElementById('formulaText');
             const checkboxContainer = document.getElementById('checkboxContainer');
             const xResultBox = document.getElementById('xResultBox');
             const yResultBox = document.getElementById('yResultBox');
@@ -757,7 +799,15 @@
             });
             
             // رویداد تغییر وضعیت چک‌باکس
-            calculateOption.addEventListener('change', updateFormulaText);
+            calculateOption.addEventListener('change', function() {
+                if (calculateOption.checked) {
+                    checkboxContainer.style.background = '#e3f2fd';
+                    document.querySelector('#yResultBox .result-title').innerHTML = '<i class="fas fa-yen-sign"></i>فی با اضافات 10%';
+                } else {
+                    checkboxContainer.style.background = '#ffecb3';
+                    document.querySelector('#yResultBox .result-title').innerHTML = '<i class="fas fa-yen-sign"></i>فی بدون اضافات';
+                }
+            });
             
             // امکان استفاده از Enter
             xInput.addEventListener('keyup', function(e) {
@@ -771,22 +821,6 @@
             productNameInput.addEventListener('keyup', function(e) {
                 if (e.key === 'Enter') calculate();
             });
-            
-            // به‌روزرسانی فرمول بر اساس وضعیت چک‌باکس
-            function updateFormulaText() {
-                if (calculateOption.checked) {
-                    formulaText.innerHTML = 'فرمول: z = y × (۱ - (درصد ÷ ۱۰۰)) <span class="formula-highlight">[y = x + (x × ۰.۱۰)]</span>';
-                    checkboxContainer.style.background = '#e3f2fd';
-                    document.querySelector('#yResultBox .result-title').innerHTML = '<i class="fas fa-yen-sign"></i>فی با اضافات 10%';
-                } else {
-                    formulaText.innerHTML = 'فرمول: z = x × (۱ - (درصد ÷ ۱۰۰)) <span class="formula-highlight">[y = x]</span>';
-                    checkboxContainer.style.background = '#ffecb3';
-                    document.querySelector('#yResultBox .result-title').innerHTML = '<i class="fas fa-yen-sign"></i>فی بدون اضافات';
-                }
-            }
-            
-            // مقداردهی اولیه فرمول
-            updateFormulaText();
             
             function calculate() {
                 // دریافت مقادیر ورودی
@@ -816,7 +850,7 @@
                     y = x;
                 }
                 
-                // محاسبه z = y - (y * (d / 100))  [تغییر مهم اینجا اعمال شده]
+                // محاسبه z = y - (y * (d / 100))
                 const discount = y * (d / 100);
                 z = y - discount;
                 
@@ -934,7 +968,8 @@
                 
                 // بازگرداندن چک‌باکس به حالت پیش‌فرض
                 calculateOption.checked = true;
-                updateFormulaText();
+                document.querySelector('#yResultBox .result-title').innerHTML = '<i class="fas fa-yen-sign"></i>فی با اضافات 10%';
+                checkboxContainer.style.background = '#e3f2fd';
                 
                 // فوکوس روی فیلد نام کالا
                 productNameInput.focus();
