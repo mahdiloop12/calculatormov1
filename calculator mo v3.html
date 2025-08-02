@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاسبه‌گر معافی</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f1b3a, #1c3b6a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+        }
+        .calculator {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35);
+            width: 100%;
+            max-width: 780px;
+            padding: 35px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .calculator::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, #3498db, #2ecc71, #e74c3c);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 34px;
+            position: relative;
+            padding-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        h1 i {
+            color: #3498db;
+            font-size: 32px;
+        }
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 4px;
+            background: linear-gradient(to right, #1a2a6c, #4a6491);
+            border-radius: 4px;
+        }
+        .input-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #3498db;
+            position: relative;
+        }
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 25px 0;
+        }
+        .input-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 20px;
+            background: #edf7ff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+            transition: transform 0.3s ease;
+        }
+        .input-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        .input-row {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 18px;
+            color: #1a2a6c;
+            font-weight: 600;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        label i {
+            color: #3498db;
+            font-size: 20px;
+        }
+        input[type="number"], input[type="text"] {
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #d1e3ff;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s;
+            background: white;
+            font-family: 'Courier New', monospace;
+        }
+        input[type="number"]:focus, input[type="text"]:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.4);
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: 1px solid #bbdefb;
+            cursor: pointer;
+        }
+        .checkbox-container:hover {
+            background: #d1e8ff;
+            transform: scale(1.02);
+        }
+        .checkbox-container label {
+            font-size: 17px;
+            color: #1e3c72;
+            font-weight: 600;
+            min-width: auto;
+            cursor: pointer;
+        }
+        input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: #3498db;
+        }
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0 15px;
+        }
+        button {
+            color: white;
+            border: none;
+            padding: 16px 35px;
+            font-size: 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        #calculateBtn {
+            background: linear-gradient(to right, #1a2a6c, #2a5298);
+        }
+        #clearBtn {
+            background: linear-gradient(to right, #b21f1f, #d43f3f);
+        }
+        #clearHistoryBtn {
+            background: linear-gradient(to right, #8e44ad, #9b59b6);
+        }
+        #printHistoryBtn {
+            background: linear-gradient(to right, #16a085, #1abc9c);
+        }
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+        button:hover::before {
+            left: 100%;
+        }
+        button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        button:active {
+            transform: translateY(1px);
+        }
+        .result-section {
+            margin-top: 25px;
+            padding: 25px;
+            background: linear-gradient(to right, #e9f7ef, #d1f0e0);
+            border-radius: 15px;
+            border-left: 5px solid #27ae60;
+            font-size: 22px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        .result-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .result-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .result-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+        }
+        .result-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        .result-title {
+            display: block;
+            margin-bottom: 15px;
+            color: #1a2a6c;
+            font-weight: bold;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .result-value {
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 36px;
+            display: block;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 10px;
+            border-radius: 8px;
+            position: relative;
+        }
+        .result-value:hover {
+            background: rgba(39, 174, 96, 0.1);
+            transform: scale(1.05);
+        }
+        .result-value.copied::after {
+            content: 'کپی شد!';
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c3e50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 14px;
+            animation: fadeOut 2s forwards;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; display: none; }
+        }
+        .history-section {
+            margin-top: 35px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .history-title {
+            color: #1a2a6c;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .history-container {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            border-radius: 10px;
+            background: white;
+        }
+        .history-header-row {
+            display: flex;
+            background: #e3f2fd;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #1a2a6c;
+        }
+        .history-header-row > div {
+            flex: 1;
+            text-align: center;
+            min-width: 100px;
+        }
+        .history-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            text-align: right;
+            border-left: 3px solid #3498db;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .history-item:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-left: 3px solid #2ecc71;
+        }
+        .history-values {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .history-value {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 120px;
+        }
+        .history-label {
+            font-weight: 600;
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .history-data {
+            font-weight: bold;
+            color: #1a2a6c;
+            font-size: 16px;
+        }
+        .history-result {
+            font-weight: bold;
+            color: #27ae60;
+            font-size: 18px;
+        }
+        .creator {
+            margin-top: 35px;
+            color: #7f8c8d;
+            font-size: 16px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .empty-history {
+            text-align: center;
+            padding: 30px;
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+        @media (max-width: 768px) {
+            .calculator {
+                padding: 25px 15px;
+            }
+            .input-section {
+                padding: 20px 15px;
+            }
+            .input-box {
+                min-width: 100%;
+            }
+            .result-box {
+                min-width: 100%;
+            }
+            button {
+                min-width: 100%;
+            }
+            .history-values {
+                min-width: 100%;
+            }
+            .history-value {
+                min-width: calc(50% - 10px);
+            }
+            .history-header-row > div {
+                font-size: 12px;
+            }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .result-box.updated {
+            animation: pulse 0.8s ease;
+        }
+        .history-actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .delete-history-item {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: transparent;
+            color: #e74c3c;
+            border: none;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 18px;
+        }
+        .delete-history-item:hover {
+            color: #c0392b;
+            transform: scale(1.1);
+        }
+        .history-product-name {
+            flex: 0 0 100%;
+            text-align: center;
+            font-weight: bold;
+            color: #1a2a6c;
+            margin-bottom: 10px;
+            font-size: 18px;
+            border-bottom: 2px dashed #3498db;
+            padding-bottom: 8px;
+        }
+        .help-container {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            z-index: 100;
+        }
+        .help-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #3498db;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .help-icon:hover {
+            background: #2980b9;
+            transform: scale(1.1);
+        }
+        .help-tooltip {
+            position: absolute;
+            bottom: 60px;
+            left: 0;
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            text-align: right;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            z-index: 101;
+        }
+        .help-icon:hover + .help-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .help-tooltip h3 {
+            color: #1a2a6c;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .help-tooltip ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .help-tooltip li {
+            margin-bottom: 10px;
+            padding-right: 10px;
+            position: relative;
+        }
+        .help-tooltip li:before {
+            content: '•';
+            color: #3498db;
+            font-size: 20px;
+            position: absolute;
+            right: -15px;
+            top: -2px;
+        }
+        /* هایلایت ردیف‌های با اضافات */
+        .history-item-extra {
+            background: linear-gradient(to right, rgba(39, 174, 96, 0.1), rgba(39, 174, 96, 0.05)) !important;
+            border-left-color: #27ae60 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1><i class="fas fa-calculator"></i>محاسبه‌گر معافی</h1>
+        <div class="input-section">
+            <div class="input-group">
+                <div class="input-box">
+                    <div class="input-row">
+                        <label for="productName"><i class="fas fa-cube"></i>نام کالا</label>
+                        <input type="text" id="productName" placeholder="نام کالا را وارد کنید">
+                    </div>
+                    <div class="input-row">
+                        <label for="xInput"><i class="fas fa-tag"></i>فی مرجع (x)</label>
+                        <input type="number" id="xInput" placeholder="مثال: 100" autofocus>
+                    </div>
+                    <div class="checkbox-container" id="checkboxContainer">
+                        <input type="checkbox" id="calculateOption" checked>
+                        <label for="calculateOption">اضافات (افزودن ۱۰٪ به x)</label>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <div class="input-row">
+                        <label for="dInput"><i class="fas fa-percentage"></i>مقدار درصد</label>
+                        <input type="number" id="dInput" placeholder="مثال: 5">
+                    </div>
+                </div>
+            </div>
+            <div class="button-group">
+                <button id="calculateBtn"><i class="fas fa-calculator"></i>محاسبه</button>
+                <button id="clearBtn"><i class="fas fa-trash-alt"></i>پاک کردن اعداد</button>
+            </div>
+        </div>
+        <div class="result-section">
+            <div class="result-row">
+                <div class="result-box" id="xResultBox">
+                    <span class="result-title"><i class="fas fa-tag"></i>فی مرجع (x)</span>
+                    <span class="result-value" id="xValue">0</span>
+                </div>
+                <div class="result-box" id="yResultBox">
+                    <span class="result-title"><i class="fas fa-yen-sign"></i>فی با اضافات 10%</span>
+                    <span class="result-value" id="yValue">0</span>
+                </div>
+                <div class="result-box" id="zResultBox">
+                    <span class="result-title"><i class="fas fa-equals"></i>قیمت نهایی (z)</span>
+                    <span class="result-value" id="zValue">0</span>
+                </div>
+            </div>
+        </div>
+        <div class="history-section">
+            <div class="history-header">
+                <div class="history-title">
+                    <i class="fas fa-history"></i>تاریخچه محاسبات
+                </div>
+                <div class="history-buttons">
+                    <button id="printHistoryBtn"><i class="fas fa-print"></i>پرینت تاریخچه</button>
+                </div>
+            </div>
+            <div class="history-container" id="historyContainer">
+                <div class="history-header-row">
+                    <div>کالا</div>
+                    <div>فی مرجع</div>
+                    <div>فی 10%</div>
+                    <div>درصد</div>
+                    <div>قیمت نهایی</div>
+                </div>
+                <div id="history"></div>
+            </div>
+            <div class="history-actions">
+                <button id="clearHistoryBtn"><i class="fas fa-trash"></i>پاک کردن تاریخچه</button>
+            </div>
+        </div>
+        <div class="creator">
+            <i class="fas fa-code"></i> توسعه داده شده توسط Uncle Mahdi
+        </div>
+    </div>
+    <div class="help-container">
+        <div class="help-icon">
+            <i class="fas fa-info"></i>
+        </div>
+        <div class="help-tooltip">
+            <h3><i class="fas fa-lightbulb"></i> راهنمای محاسبه</h3>
+            <ul>
+                <li>فی مرجع (x): قیمت پایه کالا</li>
+                <li>مقدار درصد: درصد تخفیف مورد نظر</li>
+                <li>اضافات: افزودن ۱۰٪ به قیمت پایه</li>
+                <li>بدون اضافات: z = x - (x × (درصد ÷ ۱۰۰))</li>
+                <li>با اضافات: y = x + (x × ۰.۱۰) سپس z = y - (y × (درصد ÷ ۱۰۰))</li>
+                <li>برای کپی کردن نتایج، روی اعداد کلیک کنید</li>
+                <li>تاریخچه محاسبات تا ۲۰ مورد ذخیره می‌شود</li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const productNameInput = document.getElementById('productName');
+            const xInput = document.getElementById('xInput');
+            const dInput = document.getElementById('dInput');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+            const printHistoryBtn = document.getElementById('printHistoryBtn');
+            const xValue = document.getElementById('xValue');
+            const yValue = document.getElementById('yValue');
+            const zValue = document.getElementById('zValue');
+            const historyContainer = document.getElementById('history');
+            const calculateOption = document.getElementById('calculateOption');
+            const checkboxContainer = document.getElementById('checkboxContainer');
+            const xResultBox = document.getElementById('xResultBox');
+            const yResultBox = document.getElementById('yResultBox');
+            const zResultBox = document.getElementById('zResultBox');
+
+            let x = 0;
+            let y = 0;
+            let z = 0;
+            let calculationHistory = [];
+            const MAX_HISTORY = 20;
+
+            // تابع نمایش پیام (سازگار با Electron)
+            async function showAlert(title, message) {
+                if (window.electron && window.electron.dialog) {
+                    await window.electron.dialog.showAlert({
+                        type: 'error',
+                        title,
+                        message
+                    });
+                } else {
+                    alert(message);
+                }
+            }
+
+            // تابع تأیید (confirm)
+            async function showConfirm(message) {
+                if (window.electron && window.electron.dialog) {
+                    return await window.electron.dialog.showConfirm(message);
+                } else {
+                    return confirm(message);
+                }
+            }
+
+            calculateBtn.addEventListener('click', calculate);
+            clearBtn.addEventListener('click', clearInputs);
+            clearHistoryBtn.addEventListener('click', clearHistory);
+            printHistoryBtn.addEventListener('click', printHistory);
+
+            document.querySelectorAll('.result-value').forEach(el => {
+                el.addEventListener('click', copyToClipboard);
+            });
+
+            calculateOption.addEventListener('change', function() {
+                if (calculateOption.checked) {
+                    checkboxContainer.style.background = '#e3f2fd';
+                    document.querySelector('#yResultBox .result-title').innerHTML = '<i class="fas fa-yen-sign"></i>فی با اضافات 10%';
+                } else {
+                    checkboxContainer.style.background = '#ffecb3';
+                    document.querySelector('#yResultBox .result-title').innerHTML = '<i class="fas fa-yen-sign"></i>فی بدون اضافات';
+                }
+            });
+
+            xInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') calculate();
+            });
+            dInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') calculate();
+            });
+            productNameInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') calculate();
+            });
+
+            function calculate() {
+                const productName = productNameInput.value || "کالا بدون نام";
+                x = parseFloat(xInput.value);
+                const d = parseFloat(dInput.value);
+
+                if (isNaN(x)) {
+                    showAlert('ورودی نامعتبر', 'لطفاً برای فی مرجع یک عدد معتبر وارد کنید');
+                    xInput.focus();
+                    return;
+                }
+                if (isNaN(d)) {
+                    showAlert('ورودی نامعتبر', 'لطفاً برای درصد یک عدد معتبر وارد کنید');
+                    dInput.focus();
+                    return;
+                }
+
+                if (calculateOption.checked) {
+                    y = x + (x * 0.10);
+                } else {
+                    y = x;
+                }
+
+                const discount = y * (d / 100);
+                z = y - discount;
+
+                xValue.textContent = x.toLocaleString('fa-IR');
+                yValue.textContent = y.toLocaleString('fa-IR');
+                zValue.textContent = z.toLocaleString('fa-IR');
+
+                xResultBox.classList.remove('updated');
+                yResultBox.classList.remove('updated');
+                zResultBox.classList.remove('updated');
+                setTimeout(() => {
+                    xResultBox.classList.add('updated');
+                    yResultBox.classList.add('updated');
+                    zResultBox.classList.add('updated');
+                }, 10);
+
+                saveToHistory(productName, x, d, y, z);
+            }
+
+            function saveToHistory(productName, x, d, y, z) {
+                const historyEntry = {
+                    productName,
+                    timestamp: new Date().toLocaleString('fa-IR', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    }),
+                    x,
+                    d,
+                    y,
+                    z,
+                    hasExtra: calculateOption.checked
+                };
+
+                calculationHistory.push(historyEntry);
+
+                if (calculationHistory.length > MAX_HISTORY) {
+                    calculationHistory.shift();
+                }
+
+                updateHistoryDisplay();
+            }
+
+            function updateHistoryDisplay() {
+                if (calculationHistory.length === 0) {
+                    historyContainer.innerHTML = '<div class="empty-history"><i class="fas fa-history"></i><p>تاریخچه‌ای موجود نیست</p></div>';
+                    return;
+                }
+
+                let historyHTML = "";
+                calculationHistory.forEach((entry, index) => {
+                    const extraText = entry.hasExtra ? "با اضافات" : "بدون اضافات";
+                    const rowClass = entry.hasExtra ? 'history-item-extra' : '';
+
+                    historyHTML += `
+                    <div class="history-item ${rowClass}" data-index="${index}">
+                        <div class="history-product-name">${entry.productName}</div>
+                        <div class="history-values">
+                            <div class="history-value">
+                                <span class="history-label">فی مرجع</span>
+                                <span class="history-data">${entry.x.toLocaleString('fa-IR')}</span>
+                            </div>
+                            <div class="history-value">
+                                <span class="history-label">فی 10%</span>
+                                <span class="history-data">${entry.y.toLocaleString('fa-IR')}</span>
+                            </div>
+                            <div class="history-value">
+                                <span class="history-label">درصد</span>
+                                <span class="history-data">${entry.d}%</span>
+                            </div>
+                            <div class="history-value">
+                                <span class="history-label">قیمت نهایی</span>
+                                <span class="history-result">${entry.z.toLocaleString('fa-IR')}</span>
+                            </div>
+                        </div>
+                        <button class="delete-history-item" onclick="deleteHistoryItem(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    `;
+                });
+                historyContainer.innerHTML = historyHTML;
+            }
+
+            function deleteHistoryItem(index) {
+                if (index >= 0 && index < calculationHistory.length) {
+                    calculationHistory.splice(index, 1);
+                    updateHistoryDisplay();
+                }
+            }
+
+            function clearInputs() {
+                productNameInput.value = '';
+                xInput.value = '';
+                dInput.value = '';
+                xValue.textContent = '0';
+                yValue.textContent = '0';
+                zValue.textContent = '0';
+                calculateOption.checked = true;
+                document.querySelector('#yResultBox .result-title').innerHTML = '<i class="fas fa-yen-sign"></i>فی با اضافات 10%';
+                checkboxContainer.style.background = '#e3f2fd';
+                productNameInput.focus();
+            }
+
+            async function clearHistory() {
+                if (calculationHistory.length === 0) {
+                    await showAlert('تاریخچه خالی', 'تاریخچه‌ای برای پاک کردن وجود ندارد');
+                    return;
+                }
+                const confirmed = await showConfirm('آیا مطمئن هستید که می‌خواهید تمام تاریخچه محاسبات را پاک کنید؟');
+                if (confirmed) {
+                    calculationHistory = [];
+                    updateHistoryDisplay();
+                }
+            }
+
+            function printHistory() {
+                if (calculationHistory.length === 0) {
+                    showAlert('تاریخچه خالی', 'تاریخچه‌ای برای پرینت وجود ندارد');
+                    return;
+                }
+
+                let printContent = `
+                    <!DOCTYPE html>
+                    <html lang="fa">
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>پرینت تاریخچه محاسبه‌گر معافی</title>
+                        <style>
+                            body {
+                                font-family: Tahoma, Arial, sans-serif;
+                                direction: rtl;
+                                padding: 20px;
+                            }
+                            .print-header {
+                                text-align: center;
+                                margin-bottom: 30px;
+                                border-bottom: 2px solid #3498db;
+                                padding-bottom: 15px;
+                            }
+                            .print-title {
+                                font-size: 24px;
+                                color: #1a2a6c;
+                            }
+                            .print-date {
+                                font-size: 16px;
+                                color: #7f8c8d;
+                                margin-top: 10px;
+                            }
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin-top: 20px;
+                            }
+                            th {
+                                background-color: #1a2a6c;
+                                color: white;
+                                padding: 12px;
+                                text-align: center;
+                            }
+                            td {
+                                padding: 10px;
+                                text-align: center;
+                                border-bottom: 1px solid #ddd;
+                            }
+                            tr.extra-row {
+                                background-color: #e3f7e3;
+                                font-weight: bold;
+                            }
+                            tr:nth-child(even):not(.extra-row) {
+                                background-color: #f2f2f2;
+                            }
+                            .print-footer {
+                                margin-top: 30px;
+                                text-align: left;
+                                font-size: 14px;
+                                color: #7f8c8d;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="print-header">
+                            <h1 class="print-title">تاریخچه محاسبات - محاسبه‌گر معافی</h1>
+                            <div class="print-date">تاریخ پرینت: ${new Date().toLocaleString('fa-IR')}</div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>نام کالا</th>
+                                    <th>فی مرجع</th>
+                                    <th>فی 10%</th>
+                                    <th>درصد</th>
+                                    <th>نوع فی</th>
+                                    <th>قیمت نهایی</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                calculationHistory.forEach((entry, index) => {
+                    const extraText = entry.hasExtra ? "با اضافات" : "بدون اضافات";
+                    const rowClass = entry.hasExtra ? 'extra-row' : '';
+                    printContent += `
+                        <tr class="${rowClass}">
+                            <td>${index + 1}</td>
+                            <td>${entry.productName}</td>
+                            <td>${entry.x.toLocaleString('fa-IR')}</td>
+                            <td>${entry.y.toLocaleString('fa-IR')}</td>
+                            <td>${entry.d}%</td>
+                            <td>${extraText}</td>
+                            <td>${entry.z.toLocaleString('fa-IR')}</td>
+                        </tr>
+                    `;
+                });
+                printContent += `
+                            </tbody>
+                        </table>
+                        <div class="print-footer">
+                            توسعه داده شده توسط Uncle Mahdi
+                        </div>
+                    </body>
+                    </html>
+                `;
+
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(printContent);
+                printWindow.document.close();
+                printWindow.print();
+            }
+
+            function copyToClipboard(e) {
+                const text = e.target.textContent.replace(/,/g, '');
+                navigator.clipboard.writeText(text)
+                    .then(() => {
+                        e.target.classList.add('copied');
+                        setTimeout(() => {
+                            e.target.classList.remove('copied');
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('خطا در کپی کردن: ', err);
+                        showAlert('خطا', 'خطا در کپی کردن مقدار');
+                    });
+            }
+
+            window.deleteHistoryItem = deleteHistoryItem;
+            updateHistoryDisplay();
+        });
+    </script>
+</body>
+</html>
